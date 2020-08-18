@@ -19,31 +19,46 @@ console.log(`${year[0]["Away Team Name"]} scored ${year[0]["Away Team Goals"]} g
 console.log(year[0]["Win conditions"])
 /* Task 2: Create a function called  getFinals that takes `data` as an argument and returns an array of objects with only finals data */
 
-function getFinals(/* code here */) {
-
-    /* code here */
-
+function getFinals(data) {
+    let finalsData = data.filter((item)=>{
+        return item["Stage"].includes("finals")
+    })
+    return finalsData
 };
+console.log(getFinals(fifaData));
 
 /* Task 3: Implement a higher-order function called `getYears` that accepts the callback function `getFinals`, and returns an array called `years` containing all of the years in the dataset */
 
-function getYears(/* code here */) {
-
-    /* code here */
-
+function getYears(func, data) {
+    let years = func(data).map((item)=>{
+        return item["Year"]
+    })
+    return years
 };
 
-getYears();
+console.log(getYears(getFinals, fifaData));
 
 /* Task 4: Implement a higher-order function called `getWinners`, that accepts the callback function `getFinals()` and determine the winner (home or away) of each `finals` game. Return the name of all winning countries in an array called `winners` */ 
 
-function getWinners(/* code here */) {
+function getWinners(func, data) {
 
-    /* code here */
-
+    let winners = func(data)
+    // Using .filter returns all the data that involves each finals game within the original data given. Reduced from 102 teams to 20 teams
+    .filter((finalsTeam)=>{
+        return finalsTeam["Away Team Name"] === finalsTeam["Win conditions"] !== "" && finalsTeam["Win conditions"].includes(finalsTeam["Home Team Name"]) || finalsTeam["Home Team Name"] === finalsTeam["Win conditions"] !== "" && finalsTeam["Win conditions"].includes(finalsTeam["Away Team Name"])
+        })
+    // Using .map creates a new array with only the names and conditions of the winning teams
+    .map((teamNames)=>{
+            if(teamNames["Home Team Goals"] < teamNames["Away Team Goals"] || 
+                teamNames["Home Team Goals"] > teamNames["Away Team Goals"] || 
+                teamNames["Home Team Goals"] === teamNames["Away Team Goals"]){
+                return teamNames["Win conditions"]
+            }
+    })
+    
+    return winners
 };
-
-getWinners();
+console.log(getWinners(getFinals, fifaData));
 
 /* Task 5: Implement a higher-order function called `getWinnersByYear` that accepts the following parameters and returns a set of strings "In {year}, {country} won the world cup!" 
 
