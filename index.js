@@ -62,32 +62,59 @@ Parameters:
  * callback function getWinners
  * callback function getYears
  */
+
 // General idea is to compare array indexes and create a new array with matched indexes
 function getWinnersByYear(years, winners) {
-    // PLacing the outputs of the functions into variables easily work with them
+// Placing the outputs of the functions into variables easily work with them
     let winningYears = years(getFinals, fifaData)
     let winningCountries = winners(getFinals, fifaData)
 
-    // Trying to compare indexes to combine into a single array 
+// Trying to compare indexes to combine into a single array 
     let winsByYearCountry = winningYears.map((item, i) => {
         return (`In ${winningYears[i]}, ${winningCountries[i]} won the world cup!`)
     });
-    // It works but I'm not sure if it's working for the reasons I wanted it to
-    console.log(winsByYearCountry)
+// It works but I'm not sure if it's working for the reasons I wanted it to
     return winsByYearCountry
 };
 
-getWinnersByYear(getYears, getWinners);
+console.log(getWinnersByYear(getYears, getWinners));
 
 /* Task 6: Write a function called `getAverageGoals` that accepts a parameter `data` and returns the the average number of home team goals and away team goals scored per match (Hint: use .reduce and do this in 2 steps) */
 
-function getAverageGoals(/* code here */) {
-
-    /* code here */
-
+function getAverageGoals(data) {
+    // Step 1. Define and solve the average of the away goals
+    let awayGoals = data
+    .map(goals => {
+        return goals["Away Team Goals"]
+    })
+    .reduce((acc, goals, i, awayGoals) => {
+        let average = 0
+        if(i < awayGoals.length-1){
+            return acc + goals
+        }else if(i === awayGoals.length-1){
+            console.log(average = acc/i)
+            return average = acc/i
+        }
+    }, 0)
+    // Step 2. Define and solve the average of the home goals
+    let homeGoals = data
+    .map(goals => {
+        return goals["Home Team Goals"]
+    })
+    .reduce((acc, goals, i, homeGoals) => {
+        let average = 0
+        if(i < homeGoals.length-1){
+            return acc + goals
+        }else if(i === homeGoals.length-1){
+            console.log(average = acc/i)
+            return average = acc/i
+        }
+    }, 0)
+    console.log([awayGoals, homeGoals]);
+    return [awayGoals, homeGoals]
 };
 
-getAverageGoals();
+getAverageGoals(fifaData);
 
 /// STRETCH 🥅 //
 
