@@ -20,6 +20,7 @@ console.log(year[0]["Win conditions"])
 /* Task 2: Create a function called  getFinals that takes `data` as an argument and returns an array of objects with only finals data */
 
 function getFinals(data) {
+    // Using .filter and .includes returns an array containing only objects that contain the word "finals"
     let finalsData = data.filter((item)=>{
         return item["Stage"].includes("finals")
     })
@@ -30,6 +31,7 @@ console.log(getFinals(fifaData));
 /* Task 3: Implement a higher-order function called `getYears` that accepts the callback function `getFinals`, and returns an array called `years` containing all of the years in the dataset */
 
 function getYears(func, data) {
+    // Using .map returns and array with only the years available
     let years = func(data).map((item)=>{
         return item["Year"]
     })
@@ -43,10 +45,13 @@ console.log(getYears(getFinals, fifaData));
 function getWinners(func, data) {
 
     let winners = func(data).map((teamNames)=>{
+        // This statement checks for home team victories through either a score or other win con and adds them to the array 
             if(teamNames["Home Team Goals"] > teamNames["Away Team Goals"] || teamNames["Win conditions"].includes(teamNames["Home Team Name"])){
                 return teamNames["Home Team Name"]
+        // This statement checks for away team victories through either a score or other win con and adds them to the array 
             }else if(teamNames["Away Team Goals"] < teamNames["Home Team Goals"] || teamNames["Win conditions"].includes(teamNames["Away Team Name"])){
                 return teamNames["Away Team Name"]
+        // If a tie occurs and there is no win condition mentioned in the data, then it will be labeled as "No team" wins
             }else{
                 return "No team"
             }
@@ -110,7 +115,7 @@ function getAverageGoals(data) {
             return average = acc/i
         }
     }, 0)
-    console.log([awayGoals, homeGoals]);
+    console.log([`Average of away goals: ${awayGoals}`, `Average of home goals: ${homeGoals}`]);
     return [awayGoals, homeGoals]
 };
 
