@@ -42,17 +42,13 @@ console.log(getYears(getFinals, fifaData));
 
 function getWinners(func, data) {
 
-    let winners = func(data)
-    // Using .filter returns all the data that involves each finals game within the original data given. Reduced from 102 teams to 20 teams
-    .filter((finalsTeam)=>{
-        return finalsTeam["Away Team Name"] === finalsTeam["Win conditions"] !== "" && finalsTeam["Win conditions"].includes(finalsTeam["Home Team Name"]) || finalsTeam["Home Team Name"] === finalsTeam["Win conditions"] !== "" && finalsTeam["Win conditions"].includes(finalsTeam["Away Team Name"])
-        })
-    // Using .map creates a new array with only the names and conditions of the winning teams
-    .map((teamNames)=>{
-            if(teamNames["Home Team Goals"] < teamNames["Away Team Goals"] || 
-                teamNames["Home Team Goals"] > teamNames["Away Team Goals"] || 
-                teamNames["Home Team Goals"] === teamNames["Away Team Goals"]){
-                return teamNames["Win conditions"]
+    let winners = func(data).map((teamNames)=>{
+            if(teamNames["Home Team Goals"] > teamNames["Away Team Goals"] || teamNames["Win conditions"].includes(teamNames["Home Team Name"])){
+                return teamNames["Home Team Name"]
+            }else if(teamNames["Away Team Goals"] < teamNames["Home Team Goals"] || teamNames["Win conditions"].includes(teamNames["Away Team Name"])){
+                return teamNames["Away Team Name"]
+            }else{
+                return "No team"
             }
     })
     
@@ -66,12 +62,22 @@ Parameters:
  * callback function getWinners
  * callback function getYears
  */
+// General idea is to compare array indexes and create a new array with matched indexes
+function getWinnersByYear(years, winners) {
+    // PLacing the outputs of the functions into variables easily work with them
+    let winningYears = years(getFinals, fifaData)
+    let winningCountries = winners(getFinals, fifaData)
 
-function getWinnersByYear(/* code here */) {
-
+    // Trying to compare indexes to combine into a single array 
+    let winsByYearCountry = winningYears.map((item, i) => {
+        return (`In ${winningYears[i]}, ${winningCountries[i]} won the world cup!`)
+    });
+    // It works but I'm not sure if it's working for the reasons I wanted it to
+    console.log(winsByYearCountry)
+    return winsByYearCountry
 };
 
-getWinnersByYear();
+getWinnersByYear(getYears, getWinners);
 
 /* Task 6: Write a function called `getAverageGoals` that accepts a parameter `data` and returns the the average number of home team goals and away team goals scored per match (Hint: use .reduce and do this in 2 steps) */
 
